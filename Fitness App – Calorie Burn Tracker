@@ -1,43 +1,52 @@
- Scenario: Fitness App – Calorie Burn Tracker
+public class WorkoutTracker {
+    private String userName;
+    private int age;
+    private double weight; 
+    private String workoutType;
+    private int duration; 
+    private static final double RUNNING_MET = 9.8;
+    private static final double CYCLING_MET = 7.5;
+    private static final double SWIMMING_MET = 8.3;
+    public WorkoutTracker(String userName, int age, double weight, String workoutType, int duration) {
+        this.userName = userName;
+        this.age = age;
+        this.weight = weight;
+        this.workoutType = workoutType;
+        this.duration = duration;
+    }
+    private double getMetValue() {
+        switch (workoutType.toLowerCase()) {
+            case "running":
+                return RUNNING_MET;
+            case "cycling":
+                return CYCLING_MET;
+            case "swimming":
+                return SWIMMING_MET;
+            default:
+                throw new IllegalArgumentException("Invalid workout type: " + workoutType);
+        }
+    }
+    private double calculateCaloriesBurned() {
+        double met = getMetValue();
+        double caloriesPerMinute = 0.0175 * met * weight;
+        return caloriesPerMinute * duration;
+    }
+    public void displaySummary() {
+        double caloriesBurned = calculateCaloriesBurned();
+        System.out.println("User: " + userName);
+        System.out.println("Workout: " + workoutType);
+        System.out.println("Weight: " + weight + " kg");
+        System.out.println("Duration: " + duration + " minutes");
+        System.out.printf("Calories Burned: %.1f\n", caloriesBurned);
+        System.out.println();
+    }
+    public static void main(String[] args) {
+        WorkoutTracker user1 = new WorkoutTracker("Neha", 28, 60.0, "Running", 30);
+        WorkoutTracker user2 = new WorkoutTracker("Raj", 35, 70.5, "Cycling", 45);
+        WorkoutTracker user3 = new WorkoutTracker("Anita", 25, 55.0, "Swimming", 60);
 
-You are building a Fitness Tracking Application to help users monitor their calorie burn during workouts.
-
-Each user:
-
- Has a name, age, and weight (kg).
- Performs one of the following workouts:
-
-   Running
-   Cycling
-   Swimming
-
-Each workout type has a fixed MET (Metabolic Equivalent Task) value:
-
- Running → 9.8
- Cycling → 7.5
- Swimming → 8.3
-
-Calories burned per minute is calculated by the formula:
-
-Calories/min = 0.0175 * MET * weight
-
-To get total calories burned:
-
-Total Calories=Calories/min×Duration (in minutes)
-
-
-Your Task:
-
-1. Create a class `WorkoutTracker` with appropriate variables.
-2. You must decide:
-
-    Which variables should be static, instance, or local.
-    How many methods to use to break logic cleanly (e.g., for MET value lookup, calculation, and displaying summary).
-3. Allow tracking for multiple users with different workouts and durations.
-4. Display the workout summary in the following format:
-
-User: Neha
-Workout: Running
-Weight: 60.0 kg
-Duration: 30 minutes
-Calories Burned: 308.7
+        user1.displaySummary();
+        user2.displaySummary();
+        user3.displaySummary();
+    }
+}
